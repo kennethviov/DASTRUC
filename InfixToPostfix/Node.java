@@ -55,6 +55,7 @@ class Stack<E> {
 
     E peek() {
         if (head == null) {
+            System.out.println("No data in the list.");
             return null;
         } else {
             Node<E> curr = head;
