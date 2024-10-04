@@ -6,7 +6,7 @@ public class Main {
 
         String infix = validString("Enter an infix expression: ", scan);
 
-        System.out.println(infixToPostfix(infix));
+        System.out.println("Postfix: " + infixToPostfix(infix));
         
     }
 
