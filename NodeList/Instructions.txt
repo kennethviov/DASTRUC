@@ -1,0 +1,25 @@
+Create your own class called NodeList (similar to ArrayList but this time, it is implemented using Node). The backbone of this class is the Node class example given in the previous meeting.
+
+Given the following class definition:
+
+Class Name: NodeList
+Fields:
+
+      Node last
+      int counter
+
+Constructor:
+
+Default Constructor only: set last to null, counter = 0
+
+functions:
+
+
+boolean isEmpty(): returns true if the list is empty, otherwise returns false.
+boolean add(Node item): inserts an item at the end of the list. add 1 to counter. returns true always since NodeList will never be full.
+boolean delete(int location): deletes an item from the list with the given location. returns true if the item was successfully deleted. returns false if the location is already out of bounds. cannot delete if the list is empty.
+
+void display(): displays the contents of the list.
+
+
+You may create a test class: TestNodeList.java to test your NodeList program
