@@ -14,6 +14,7 @@ class Stack<E> {
 
     public Stack() {
         head = null;
+        count= 0;
     }
 
     void push(E data) {
