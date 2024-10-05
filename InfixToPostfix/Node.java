@@ -12,8 +12,8 @@ class Stack<E> {
     Node<E> head;
     private int count;
 
-    public Stack(Node<E> head) {
-        this.head = head;
+    public Stack() {
+        head = null;
     }
 
     void push(E data) {
