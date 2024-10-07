@@ -1,86 +1,86 @@
-import java.util.*;
-
 public class Main {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
+        String infix = "6+8*7/5*8+4/6-4*7";
 
-        String infix = validString("Enter an infix expression: ", scan);
-
-        System.out.println("Postfix: " + infixToPostfix(infix));
+        System.out.println(toPostfix(infix));
         
+        System.out.println(evalPostfix(toPostfix(infix)));
     }
 
-    static String infixToPostfix(String infix) {
-        Stack<Character> stack = new Stack<>(null);
+    static String toPostfix(String infix) {
+        Stack<Character> stack = new Stack<Character>();
         String postfix = "";
 
         for (int i = 0; i < infix.length(); i++) {
             if (isOperand(infix.charAt(i))) {
                 postfix = postfix + infix.charAt(i);
             } else if (isOperator(infix.charAt(i))) {
-                if (stack.head == null || comparePrecedence(stack, infix.charAt(i)) == 2) {
-                    stack.push(infix.charAt(i));
-                } else if (comparePrecedence(stack, infix.charAt(i)) == 0 || 
-                           comparePrecedence(stack, infix.charAt(i)) == 1) {
+                while (!stack.isEmpty() && 
+                       comparePrecedence(stack.peek(), infix.charAt(i)) != 2) {
                     postfix = postfix + stack.pop();
-                    stack.push(infix.charAt(i));
-                } 
+                }
+                stack.push(infix.charAt(i));
             }
         }
-
-        for (int i = 0; i < stack.getCount(); i++) {
+        int limit = stack.getCount();
+        for (int i = 0; i < limit; i++) {
             postfix = postfix + stack.pop();
         }
         return postfix;
     }
 
-    static boolean isOperator(char c) {
+    static double evalPostfix(String postfix) {
+        Stack<Double> operands = new Stack<Double>();
+        
+        for (int i = 0; i < postfix.length(); i++) {
+            if (isOperand(postfix.charAt(i))) {
+                operands.push((double)Character.getNumericValue(postfix.charAt(i)));
+            } else if (isOperator(postfix.charAt(i))) {
+                double op2 = operands.pop();
+                double op1 = operands.pop();
+                if        (postfix.charAt(i) == '/') {
+                    operands.push(op1 / op2);
+                } else if (postfix.charAt(i) == '*') {
+                    operands.push(op1 * op2);
+                } else if (postfix.charAt(i) == '+') {
+                    operands.push(op1 + op2);
+                } else if (postfix.charAt(i) == '-') {
+                    operands.push(op1 - op2);
+                }
+            }
+        }
+
+        return operands.peek();
+    }
+
+    private static boolean isOperator(char c) {
         return (c == '+' || c == '-' || c == '*' || c == '/');
     }
 
-    static boolean isOperand(char c) {
+    private static boolean isOperand(char c) {
         return c >= '0' && c <= '9';
     }
 
-    static int comparePrecedence(Stack<Character> stack, char c) {
-        int op1 = getPrecedence(stack.peek());
-        int op2 = getPrecedence(c);
+    private static int comparePrecedence(char c1, char c2) {
+        int op1 = getPrecedence(c1);
+        int op2 = getPrecedence(c2);
 
         if (op1 > op2)
             return 1;  // op1 has higher percedence
-        else if (op1 < op2) {
+        else if (op1 < op2)
             return 2; // op2 has higher precedence
-        } else 
-            return 0;
+        else
+            return 0; // equal precedence
     }
 
     private static int getPrecedence(char c) {
         switch (c) {
-            case '*':
-            case '/':
+            case '*': case '/':
                 return 2; // highest precedence
-            case '+':
-            case '-':
+            case '+': case '-':
                 return 1; // lowest precedence
             default:
                 return 0;
         }
-    }
-
-    static String validString(String prompt, Scanner scan) {
-        String str = "";
-        boolean isValid = false;
-
-        while (!isValid) {
-            try {
-                System.out.print(prompt);
-                str = scan.nextLine();
-                isValid = true;
-            } catch (Exception e) {
-                System.err.println("Error! Input should be a string");
-            }
-        }
-
-        return str;
     }
 }
